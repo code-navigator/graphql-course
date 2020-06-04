@@ -1,6 +1,6 @@
 const Subscription = {
   count: {
-    subscribe(parent, args, { pubsub }, info) {
+    subscribe (parent, args, { pubsub }, info) {
       let count = 0
 
       setInterval(() => {
@@ -8,12 +8,12 @@ const Subscription = {
         pubsub.publish('count', {
           count
         })
-      }, 1000);
+      }, 1000)
 
       return pubsub.asyncIterator('count')
     },
     comment: {
-      subscribe(parent, { postId }, { db, pubsub }, info){
+      subscribe (parent, { postId }, { db, pubsub }, info) {
         const post = db.posts.find((post) => post.id === postId && post.published)
 
         if (!post) {
@@ -26,4 +26,4 @@ const Subscription = {
   }
 }
 
-export { Subscription as default}
+export { Subscription as default }

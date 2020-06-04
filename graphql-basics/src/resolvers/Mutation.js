@@ -1,7 +1,7 @@
-import uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 
 const Mutation = {
-  createUser(parent, args, { db }, info) {
+  createUser (parent, args, { db }, info) {
     const emailTaken = db.users.some((user) => user.email === args.data.email)
 
     if (emailTaken) {
@@ -17,7 +17,7 @@ const Mutation = {
 
     return user
   },
-  deleteUser(parent, { db }, ctx, info) {
+  deleteUser (parent, args, { db }, ctx, info) {
     const userIndex = db.users.findIndex((user) => user.id === args.id)
 
     if (userIndex === -1) {
@@ -39,7 +39,7 @@ const Mutation = {
 
     return deletedUsers[0]
   },
-  updateUser(parent, args, { db }, info) {
+  updateUser (parent, args, { db }, info) {
     const { id, data } = args
     const user = db.users.find((user) => user.id === id)
 
@@ -47,9 +47,7 @@ const Mutation = {
       throw new Error('User not found')
     }
 
-
     if (typeof data.email === 'string') {
-
       const emailTaken = db.users.some((user) => user.email === data.email)
 
       if (emailTaken) {
@@ -69,7 +67,7 @@ const Mutation = {
 
     return user
   },
-  createPost(parent, args, { db }, info) {
+  createPost (parent, args, { db }, info) {
     const userExists = db.users.some((user) => user.id === args.data.author)
 
     if (!userExists) {
@@ -85,7 +83,7 @@ const Mutation = {
 
     return post
   },
-  deletePost(parent, args, { db }, info) {
+  deletePost (parent, args, { db }, info) {
     const postIndex = db.posts.findIndex((post) => post.id === args.id)
 
     if (postIndex === -1) {
@@ -98,7 +96,7 @@ const Mutation = {
 
     return deletedPosts[0]
   },
-  updatePost(parent, args, { db }, info) {
+  updatePost (parent, args, { db }, info) {
     const { id, data } = args
     const post = db.posts.find((post) => post.id === id)
 
@@ -120,7 +118,7 @@ const Mutation = {
 
     return post
   },
-  createComment(parent, args, { db, pubsub }, info) {
+  createComment (parent, args, { db, pubsub }, info) {
     const userExists = db.users.some((user) => user.id === args.data.author)
 
     if (!userExists) {
@@ -128,7 +126,7 @@ const Mutation = {
     }
 
     const postExists = db.posts.some((post) => post.id === args.data.post && post.published)
-    
+
     if (!postExists) {
       throw new Error('Post not found or it is not published')
     }
@@ -137,15 +135,14 @@ const Mutation = {
       id: uuidv4(),
       ...args.data
     }
-    
+
     db.comments.push(comment)
     pubsub(`comment ${args.data.post}`, { comment })
 
     return comment
-
   },
-  deleteComment(parent, args, { db }, info) {
-    const commentIndex = db.comments.findIndex((comment) => comment.id === args.id )
+  deleteComment (parent, args, { db }, info) {
+    const commentIndex = db.comments.findIndex((comment) => comment.id === args.id)
 
     if (commentIndex === -1) {
       throw new Error('Comment not found')
@@ -155,7 +152,7 @@ const Mutation = {
 
     return deletedComments[0]
   },
-  updateComment(parent, args, { db }, info) {
+  updateComment (parent, args, { db }, info) {
     const { id, data } = args
     const comment = db.comments.find((comment) => comment.id === id)
 
@@ -171,4 +168,4 @@ const Mutation = {
   }
 }
 
-export { Mutation as default}
+export { Mutation as default }
