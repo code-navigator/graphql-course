@@ -137,7 +137,7 @@ const Mutation = {
     }
 
     db.comments.push(comment)
-    pubsub(`comment ${args.data.post}`, { comment })
+    pubsub.publish(`comment ${args.data.post}`, { comment })
 
     return comment
   },
